@@ -19,13 +19,24 @@ function App() {
     setMyShowForm((myShowForm) => !myShowForm);
   }
 
+  // post to our server a new poem using POST method
+  function handleOurNewPoem(recentPoem) {
+    fetch("http://localhost:8004/poems", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(recentPoem),
+    })
+      .then((res) => res.json())
+      .then((poem) => setPoems((poems) => [...poems, poem]));
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
         <button onClick={handleButtonClick}>
           {myShowForm ? "Hide" : "Show"} new poem form
         </button>
-        {myShowForm ? <NewPoemForm /> : null}
+        {myShowForm ? <NewPoemForm onSubmitting={handleOurNewPoem} /> : null}
       </div>
       <PoemsContainer poems={poems} />
     </div>
